@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -30,7 +24,8 @@ namespace PPPOE_Connect
             add_link.Create_link(version);
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
-            label_version.Text = "0.3";
+
+            label_version.Text = "0.4";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -56,16 +51,19 @@ namespace PPPOE_Connect
 
                     if (radio_StaticIP.Checked)
                     {
+                        //静态IP的后台线路
                         pppoe_id = "dianxin";
                         pppoe_pw = "asd123";
                     }
                     if (radio_LT_Line.Checked)
                     {
+                        //联通专线
                         pppoe_id = "liantong";
                         pppoe_pw = "asd456";
                     }
                     if (radio_Download.Checked)
                     {
+                        //下载专线
                         pppoe_id = "ctcc";
                         pppoe_pw = "123";
                     }
@@ -143,7 +141,7 @@ namespace PPPOE_Connect
 
             this.label_Public_IP.Text = "获取中...";
             this.label_Public_IP.Text = gii.GetIP();
-            if (gii.GetIP() == "获取失败"|| label_PrivateIP.Text=="Null")
+            if (gii.GetIP() == "获取失败" && label_PrivateIP.Text=="Null")
             {
                 pictureBox1.Image = imageList1.Images[2];
                 label3.Text = "拨号好像失败了..";
@@ -185,5 +183,24 @@ namespace PPPOE_Connect
             }
         }
 
+        private void 断开连接ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button1.Enabled = false;
+            pppoe.pppoe_off();
+            GetIP();
+            button1.Enabled = true;
+            radio_LT_Line.Enabled = true;
+            radio_StaticIP.Enabled = true;
+            radio_Download.Enabled = true;
+            label_PrivateIP.Text = "Null";
+            button1.Text = "连接";
+            pictureBox1.Image = imageList1.Images[0];
+        }
+
+        private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pppoe.pppoe_off();
+            Environment.Exit(0);
+        }
     }
 }
