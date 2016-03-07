@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
@@ -18,8 +19,20 @@ namespace PPPOE_Connect
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 
+        //public string getSystemCurrentBuild()
+        //{
+        //    RegistryKey hkml = Registry.LocalMachine;
+        //    RegistryKey software = hkml.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", true);
+        //    return software.GetValue("CurrentBuild").ToString();
+        //}
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            //if (getSystemCurrentBuild()=="14271")
+            //{
+            //    MessageBox.Show("此版本Windows10存在PPPOE拨号Bug，请降级回正式版本");
+            //    Environment.Exit(0);
+            //}
             int version = Environment.OSVersion.Version.Major + Environment.OSVersion.Version.Minor;
             add_link.Create_link(version);
             label_Public_IP.Text = gii.GetIP();
@@ -68,7 +81,7 @@ namespace PPPOE_Connect
                         pppoe_pw = "123";
                     }
                         pppoe.pppoe_on(pppoe_id, pppoe_pw);
-                        Thread.Sleep(1000);
+                        Thread.Sleep(500);
                         NetworkInterface[] allNetworkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
                         NetworkInterface[] array = allNetworkInterfaces;
                         for (int i = 0; i < array.Length; i++)
@@ -95,6 +108,7 @@ namespace PPPOE_Connect
                             }
 
                     }
+                    
                     if (label_PrivateIP.Text != "Null")
                     {
                         button1.Text = "断开";
@@ -104,8 +118,13 @@ namespace PPPOE_Connect
                         radio_Download.Enabled = false;
                         Console.WriteLine(gii.GetIP());
                         GetIP();
+                        if (gii.GetIP() == "222.76.112.57"|| gii.GetIP() == "222.76.112.61"|| gii.GetIP() == "222.76.112.89"|| gii.GetIP() == "222.76.112.81"|| gii.GetIP() == "222.76.112.85")
+                        {
+                            //MessageBox.Show("已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！");
+                            notifyIcon1.ShowBalloonTip(1000,"提示", "已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！", ToolTipIcon.Info);
+                        }
                         pictureBox1.Image = imageList2.Images[0];
-                        label3.Text = "";
+                        label3.Text = "连接成功~！";
                         Console.WriteLine("--------Link-------OK");
                     }
                     else
@@ -123,6 +142,7 @@ namespace PPPOE_Connect
             }
             else
             {
+                label3.Text = "";
                 button1.Enabled = false;
                 pppoe.pppoe_off();
                 GetIP();
@@ -201,6 +221,15 @@ namespace PPPOE_Connect
         {
             pppoe.pppoe_off();
             Environment.Exit(0);
+        }
+
+        private void Form1_SizeChanged_1(object sender, EventArgs e)
+        {
+            if (this.WindowState==FormWindowState.Minimized)
+            {
+                this.Hide();
+                this.notifyIcon1.Visible = true;
+            }
         }
     }
 }

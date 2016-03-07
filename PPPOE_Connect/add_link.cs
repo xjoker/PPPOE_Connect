@@ -14,11 +14,13 @@ namespace PPPOE_Connect
             string name = "%userprofile%\\AppData\\Roaming\\Microsoft\\Network\\Connections\\Pbk\\rasphone.pbk";
             string path = Environment.ExpandEnvironmentVariables(name);
             string dir = Path.GetDirectoryName(path);
+            FileStream fileStream = null;
+            StreamWriter streamWriter = null;
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             if (version == 8)
             {
-                FileStream fileStream = new FileStream(path, FileMode.Create);
-                StreamWriter streamWriter = new StreamWriter(fileStream);
+                fileStream = new FileStream(path, FileMode.Create);
+                streamWriter = new StreamWriter(fileStream);
                 streamWriter.WriteLine("[CYJH]");
                 streamWriter.WriteLine("Encoding=1");
                 streamWriter.WriteLine("PBVersion=3");
@@ -134,14 +136,13 @@ namespace PPPOE_Connect
                 streamWriter.WriteLine("TryNextAlternateOnFail=1");
                 streamWriter.WriteLine("");
                 streamWriter.WriteLine("");
-                streamWriter.Flush();
-                streamWriter.Close();
-                fileStream.Close();
+
+
             }
             else if (version == 7)
             {
-                FileStream fileStream = new FileStream(path, FileMode.Create);
-                StreamWriter streamWriter = new StreamWriter(fileStream);
+                fileStream = new FileStream(path, FileMode.Create);
+                streamWriter = new StreamWriter(fileStream);
                 streamWriter.WriteLine("[CYJH]");
                 streamWriter.WriteLine("Encoding=1");
                 streamWriter.WriteLine("PBVersion=1");
@@ -237,16 +238,14 @@ namespace PPPOE_Connect
                 streamWriter.WriteLine("LastSelectedPhone=0");
                 streamWriter.WriteLine("PromoteAlternates=0");
                 streamWriter.WriteLine("TryNextAlternateOnFail=1");
-                streamWriter.Flush();
-                streamWriter.Close();
-                fileStream.Close();
+                
             }
             else if (version == 6)
             {
                 name = "C:\\Documents and Settings\\All Users\\Application Data\\Microsoft\\Network\\Connections\\Pbk\\rasphone.pbk";
                 path = Environment.ExpandEnvironmentVariables(name);
-                FileStream fileStream = new FileStream(path, FileMode.Create);
-                StreamWriter streamWriter = new StreamWriter(fileStream);
+                fileStream = new FileStream(path, FileMode.Create);
+                streamWriter = new StreamWriter(fileStream);
                 streamWriter.WriteLine("[CYJH]");
                 streamWriter.WriteLine("Encoding=1");
                 streamWriter.WriteLine("Type=5");
@@ -336,14 +335,14 @@ namespace PPPOE_Connect
                 streamWriter.WriteLine("LastSelectedPhone=0");
                 streamWriter.WriteLine("PromoteAlternates=0");
                 streamWriter.WriteLine("TryNextAlternateOnFail=1");
-                streamWriter.Flush();
-                streamWriter.Close();
-                fileStream.Close();
             }
             else
             {
                 MessageBox.Show("未知操作系统，无法使用....");
             }
+            //streamWriter.Flush();
+            streamWriter.Close();
+            //fileStream.Close();
         }
     }
 }

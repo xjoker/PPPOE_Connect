@@ -15,7 +15,7 @@ namespace PPPOE_Connect
             int count = 0;
             while (count < 3)
             {
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
                 try
                 {
                     WebRequest wr = WebRequest.Create("http://www.ip138.com/ips138.asp");
@@ -27,7 +27,7 @@ namespace PPPOE_Connect
                     int end = all.IndexOf("]", start);
                     tempip = all.Substring(start, end - start);
                     sr.Close();
-                    s.Close();
+
                     //Console.WriteLine("get_ip: " + count);
                     /////截取网站数据
                     /////数据范例 ：您的IP是：[122.228.229.21] 来自：浙江省温州市 电信
