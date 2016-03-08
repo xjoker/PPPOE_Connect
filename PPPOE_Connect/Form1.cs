@@ -23,7 +23,7 @@ namespace PPPOE_Connect
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            //pppoe.pppoe_off();
             Logging.OpenLogFile();
             Logging.Info("----------  程序启动  ----------");
             Logging.Info("系统版本" + version);
@@ -31,6 +31,13 @@ namespace PPPOE_Connect
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
             label_version.Text = "0.5";
+            if (gii.GetIP() == "222.76.112.57" || gii.GetIP() == "222.76.112.61" || gii.GetIP() == "222.76.112.89" || gii.GetIP() == "222.76.112.81" || gii.GetIP() == "222.76.112.85")
+            {
+                notifyIcon1.ShowBalloonTip(2000, "提示", "已经为静态IP网段！无需使用工具。", ToolTipIcon.Info);
+                radio_StaticIP.Enabled = false;
+                radio_StaticIP.Checked = false;
+                radio_Download.Checked = true;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -133,7 +140,7 @@ namespace PPPOE_Connect
                         GetIP();
                         if (gii.GetIP() == "222.76.112.57"|| gii.GetIP() == "222.76.112.61"|| gii.GetIP() == "222.76.112.89"|| gii.GetIP() == "222.76.112.81"|| gii.GetIP() == "222.76.112.85")
                         {
-                            notifyIcon1.ShowBalloonTip(1000,"提示", "已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！", ToolTipIcon.Info);
+                            notifyIcon1.ShowBalloonTip(2000,"提示", "已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！", ToolTipIcon.Info);
                         }
                         pictureBox1.Image = imageList2.Images[0];
                         label3.Text = "连接成功~！";

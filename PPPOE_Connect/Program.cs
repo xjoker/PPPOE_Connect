@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace PPPOE_Connect
@@ -15,7 +13,21 @@ namespace PPPOE_Connect
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            bool ret;
+            System.Threading.Mutex mutex = new System.Threading.Mutex(true, Application.ProductName, out ret);
+
+            if (ret)
+            {
+                Application.Run(new Form1());
+            }
+            else
+            {
+                MessageBox.Show("程序已经在运行!");
+                Application.Exit();
+            }
+
+            
+
         }
     }
 }
