@@ -26,10 +26,11 @@ namespace PPPOE_Connect
 
             Logging.OpenLogFile();
             Logging.Info("----------  程序启动  ----------");
+            Logging.Info("系统版本" + version);
             add_link.Create_link(version);
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
-            label_version.Text = "0.4";
+            label_version.Text = "0.5";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -132,7 +133,6 @@ namespace PPPOE_Connect
                         GetIP();
                         if (gii.GetIP() == "222.76.112.57"|| gii.GetIP() == "222.76.112.61"|| gii.GetIP() == "222.76.112.89"|| gii.GetIP() == "222.76.112.81"|| gii.GetIP() == "222.76.112.85")
                         {
-                            //MessageBox.Show("已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！");
                             notifyIcon1.ShowBalloonTip(1000,"提示", "已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！", ToolTipIcon.Info);
                         }
                         pictureBox1.Image = imageList2.Images[0];
@@ -224,6 +224,7 @@ namespace PPPOE_Connect
                 this.Activate();
             }
         }
+
 
         private void 断开连接ToolStripMenuItem_Click(object sender, EventArgs e)
         {

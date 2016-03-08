@@ -23,11 +23,9 @@ namespace PPPOE_Connect
             //几个必要的参数
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardInput = true;
-            //p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.Arguments = " CYJH " + pppoe_id + " " + pppoe_pw;
             p.Start();
-            //ras_log = p.StandardOutput.ReadToEnd();
             p.Close();
         }
 
@@ -47,7 +45,6 @@ namespace PPPOE_Connect
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.Arguments = " CYJH /DISCONNECT";
             p.Start();
-            //ras_log = p.StandardOutput.ReadToEnd();
             p.Close();
         }
     }
