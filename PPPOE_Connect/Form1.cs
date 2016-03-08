@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
@@ -9,6 +10,15 @@ namespace PPPOE_Connect
 {
     public partial class Form1 : Form
     {
+        List<string> StaticIPList = new List<string>
+        {
+            "222.76.112.57",
+            "222.76.112.61",
+            "222.76.112.89",
+            "222.76.112.81",
+            "222.76.112.85"
+        };
+
         public int version = Environment.OSVersion.Version.Major + Environment.OSVersion.Version.Minor;
         GET_Internet_IP gii = new GET_Internet_IP();
         string pppoe_id = null;
@@ -31,7 +41,7 @@ namespace PPPOE_Connect
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
             label_version.Text = "0.5";
-            if (gii.GetIP() == "222.76.112.57" || gii.GetIP() == "222.76.112.61" || gii.GetIP() == "222.76.112.89" || gii.GetIP() == "222.76.112.81" || gii.GetIP() == "222.76.112.85")
+            if (StaticIPList.Contains(gii.GetIP()))
             {
                 notifyIcon1.ShowBalloonTip(2000, "提示", "已经为静态IP网段！无需使用工具。", ToolTipIcon.Info);
                 radio_StaticIP.Enabled = false;
@@ -138,7 +148,7 @@ namespace PPPOE_Connect
                         radio_Download.Enabled = false;
                         Logging.Info(gii.GetIP());
                         GetIP();
-                        if (gii.GetIP() == "222.76.112.57"|| gii.GetIP() == "222.76.112.61"|| gii.GetIP() == "222.76.112.89"|| gii.GetIP() == "222.76.112.81"|| gii.GetIP() == "222.76.112.85")
+                        if (StaticIPList.Contains(gii.GetIP()))
                         {
                             notifyIcon1.ShowBalloonTip(2000,"提示", "已经切换至后台线路\n此线路无法观看在线视频及使用迅雷！", ToolTipIcon.Info);
                         }
