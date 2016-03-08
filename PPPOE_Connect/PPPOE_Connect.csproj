@@ -95,6 +95,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GET_Internet_IP.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="pppoe.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,7 +112,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="my.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">

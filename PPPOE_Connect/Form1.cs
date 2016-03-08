@@ -9,7 +9,7 @@ namespace PPPOE_Connect
 {
     public partial class Form1 : Form
     {
-
+        public int version = Environment.OSVersion.Version.Major + Environment.OSVersion.Version.Minor;
         GET_Internet_IP gii = new GET_Internet_IP();
         string pppoe_id = null;
         string pppoe_pw = null;
@@ -19,25 +19,16 @@ namespace PPPOE_Connect
             Control.CheckForIllegalCrossThreadCalls = false;
         }
 
-        //public string getSystemCurrentBuild()
-        //{
-        //    RegistryKey hkml = Registry.LocalMachine;
-        //    RegistryKey software = hkml.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", true);
-        //    return software.GetValue("CurrentBuild").ToString();
-        //}
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //if (getSystemCurrentBuild()=="14271")
-            //{
-            //    MessageBox.Show("此版本Windows10存在PPPOE拨号Bug，请降级回正式版本");
-            //    Environment.Exit(0);
-            //}
-            int version = Environment.OSVersion.Version.Major + Environment.OSVersion.Version.Minor;
+
+            Logging.OpenLogFile();
+            Logging.Info("----------  程序启动  ----------");
             add_link.Create_link(version);
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
-
             label_version.Text = "0.4";
         }
 
@@ -67,18 +58,21 @@ namespace PPPOE_Connect
                         //静态IP的后台线路
                         pppoe_id = "dianxin";
                         pppoe_pw = "asd123";
+                        Logging.Info("进入后台线路");
                     }
                     if (radio_LT_Line.Checked)
                     {
                         //联通专线
                         pppoe_id = "liantong";
                         pppoe_pw = "asd456";
+                        Logging.Info("进入联通线路");
                     }
                     if (radio_Download.Checked)
                     {
                         //下载专线
                         pppoe_id = "ctcc";
                         pppoe_pw = "123";
+                        Logging.Info("进入下载线路");
                     }
                         pppoe.pppoe_on(pppoe_id, pppoe_pw);
                         Thread.Sleep(500);
@@ -87,14 +81,17 @@ namespace PPPOE_Connect
                         for (int i = 0; i < array.Length; i++)
                         {
                             NetworkInterface networkInterface = array[i];
-                            Console.WriteLine(string.Concat(new object[]
+                            Logging.Info(string.Concat(new object[]
                             {
-                            "获取本地IP：",
+                            "搜寻本地IP中 ：",
                             networkInterface.NetworkInterfaceType,
                             " ",
                             networkInterface.Description.ToString()
                             }));
-                            if (networkInterface.Description.Contains("CYJH"))
+                        //For XP
+                        if(version==6)
+                        {
+                            if (networkInterface.NetworkInterfaceType.ToString()=="Ppp")
                             {
                                 IPInterfaceProperties iPProperties = networkInterface.GetIPProperties();
                                 UnicastIPAddressInformationCollection unicastAddresses = iPProperties.UnicastAddresses;
@@ -103,6 +100,21 @@ namespace PPPOE_Connect
                                     if (current.Address.AddressFamily == AddressFamily.InterNetwork)
                                     {
                                         label_PrivateIP.Text = current.Address.ToString();
+                                        Logging.Info("本地IP为："+ current.Address.ToString());
+                                    }
+                                }
+                            }
+                        }
+                        else if(networkInterface.Description.Contains("CYJH"))
+                            {
+                                IPInterfaceProperties iPProperties = networkInterface.GetIPProperties();
+                                UnicastIPAddressInformationCollection unicastAddresses = iPProperties.UnicastAddresses;
+                                foreach (UnicastIPAddressInformation current in unicastAddresses)
+                                {
+                                    if (current.Address.AddressFamily == AddressFamily.InterNetwork)
+                                    {
+                                        label_PrivateIP.Text = current.Address.ToString();
+                                        Logging.Info("本地IP为：" + current.Address.ToString());
                                     }
                                 }
                             }
@@ -116,7 +128,7 @@ namespace PPPOE_Connect
                         radio_LT_Line.Enabled = false;
                         radio_StaticIP.Enabled = false;
                         radio_Download.Enabled = false;
-                        Console.WriteLine(gii.GetIP());
+                        Logging.Info(gii.GetIP());
                         GetIP();
                         if (gii.GetIP() == "222.76.112.57"|| gii.GetIP() == "222.76.112.61"|| gii.GetIP() == "222.76.112.89"|| gii.GetIP() == "222.76.112.81"|| gii.GetIP() == "222.76.112.85")
                         {
@@ -125,19 +137,20 @@ namespace PPPOE_Connect
                         }
                         pictureBox1.Image = imageList2.Images[0];
                         label3.Text = "连接成功~！";
-                        Console.WriteLine("--------Link-------OK");
+                        Logging.Info("--------链接完成-------");
                     }
                     else
                     {
                         label3.Text = "失败了...";
                         pictureBox1.Image = imageList1.Images[2];
                         button1.Enabled = true;
+                        Logging.Error("链接失败！");
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    Logging.Error(ex);
                 }
             }
             else
@@ -159,12 +172,20 @@ namespace PPPOE_Connect
         private void GetIP()
         {
 
-            this.label_Public_IP.Text = "获取中...";
-            this.label_Public_IP.Text = gii.GetIP();
+            label_Public_IP.Text = "获取中...";
+            label_Public_IP.Text = gii.GetIP();
             if (gii.GetIP() == "获取失败" && label_PrivateIP.Text=="Null")
             {
                 pictureBox1.Image = imageList1.Images[2];
                 label3.Text = "拨号好像失败了..";
+                if(label_PrivateIP.Text == "Null")
+                {
+                    Logging.Error("获取PPPOE IP失败");
+                }
+                else
+                {
+                    Logging.Error("获取公网IP失败");
+                }
             }
         }
 
@@ -178,6 +199,7 @@ namespace PPPOE_Connect
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             pppoe.pppoe_off();
+            Logging.Info("程序退出");
         }
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
