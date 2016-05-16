@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace PPPOE_Connect
@@ -11,10 +8,32 @@ namespace PPPOE_Connect
     {
         public static void Create_link(int version)
         {
+            int fileErrorTag = 0;
             try
             {
                 string name = "%userprofile%\\AppData\\Roaming\\Microsoft\\Network\\Connections\\Pbk\\rasphone.pbk";
                 string path = Environment.ExpandEnvironmentVariables(name);
+
+                //判断pbk文件是否有错误
+                if (File.Exists(path))
+                {
+                    using (var sr = File.OpenText(path))
+                    {
+                        string strLine;
+                        while ((strLine=sr.ReadLine())!=null)
+                        {
+                            if (strLine.IndexOf("PBVersion=1")!=-1)
+                            {
+                                fileErrorTag = 1;
+                            }
+                        }
+                    };
+                    if (fileErrorTag!=0)
+                    {
+                        Logging.Error("pbk文件有误");
+                        File.Delete(path);
+                    }
+                }
                 string dir = Path.GetDirectoryName(path);
                 FileStream fileStream = null;
                 StreamWriter streamWriter = null;

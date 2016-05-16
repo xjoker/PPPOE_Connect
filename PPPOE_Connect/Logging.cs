@@ -17,6 +17,18 @@ namespace PPPOE_Connect
             try
             {
                 LogFilePath = Path.Combine(Application.StartupPath, "xlqh.log");
+
+                //限制日志文件不大于30KB
+                if (File.Exists(LogFilePath))
+                {
+                    FileInfo fi = new FileInfo(LogFilePath);
+                    if (fi.Length>30000)
+                    {
+                        File.Delete(LogFilePath);
+                    }
+                }
+
+
                 FileStream fs = new FileStream(LogFilePath, FileMode.Append);
                 StreamWriterWithTimestamp sw = new StreamWriterWithTimestamp(fs);
                 sw.AutoFlush = true;
@@ -25,9 +37,8 @@ namespace PPPOE_Connect
 
                 return true;
             }
-            catch (IOException e)
+            catch 
             {
-                Console.WriteLine(e.ToString());
                 return false;
             }
         }

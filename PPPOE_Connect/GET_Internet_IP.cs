@@ -7,7 +7,6 @@ namespace PPPOE_Connect
 {
     class GET_Internet_IP
     {
-        private string tempip;
 
         public string GetIP()
         {
@@ -15,22 +14,21 @@ namespace PPPOE_Connect
             int count = 0;
             while (count < 3)
             {
-                Thread.Sleep(100);
+
                 try
                 {
-                    WebRequest wr = WebRequest.Create("http://www.ip138.com/ips138.asp");
-                    //加速获取IP的速率
-                    wr.Proxy = null;
-                    wr.Timeout = 3000;
-                    Stream s = wr.GetResponse().GetResponseStream();
+                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://xjoker.us/getip.php");
+                    hwr.Timeout = 5000;
+                    hwr.KeepAlive = false;
+                    HttpWebResponse hwrs = (HttpWebResponse)hwr.GetResponse();
+                    Stream s = hwrs.GetResponseStream();
                     StreamReader sr = new StreamReader(s, Encoding.Default);
                     all = sr.ReadToEnd(); //读取网站的数据
-
-                    int start = all.IndexOf("您的IP地址是：[") + 9;
-                    int end = all.IndexOf("]", start);
-                    tempip = all.Substring(start, end - start);
+                    hwr.Abort();
+                    hwrs.Close();
                     sr.Close();
-                    return tempip;
+
+                    return all;
                 }
                 catch
                 {

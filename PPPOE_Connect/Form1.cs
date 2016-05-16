@@ -40,10 +40,10 @@ namespace PPPOE_Connect
             add_link.Create_link(version);
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
-            label_version.Text = "0.5";
+            label_version.Text = "0.5.1";
             if (StaticIPList.Contains(gii.GetIP()))
             {
-                notifyIcon1.ShowBalloonTip(2000, "提示", "已经为静态IP网段！无需使用工具。", ToolTipIcon.Info);
+                notifyIcon1.ShowBalloonTip(2000, "提示", "已经为静态IP网段，或者已经手动拨号！", ToolTipIcon.Info);
                 radio_StaticIP.Enabled = false;
                 radio_StaticIP.Checked = false;
                 radio_Download.Checked = true;
@@ -67,6 +67,8 @@ namespace PPPOE_Connect
             if (button1.Text != "断开")
             {
                 label3.Text = "链接中....";
+                pppoe.pppoe_off();
+                Thread.Sleep(500);
                 try
                 {
                     button1.Enabled = false;
@@ -146,6 +148,10 @@ namespace PPPOE_Connect
                         radio_LT_Line.Enabled = false;
                         radio_StaticIP.Enabled = false;
                         radio_Download.Enabled = false;
+                        if(pppoe_id == "ctcc")
+                        {
+                            Thread.Sleep(5000);
+                        }
                         Logging.Info(gii.GetIP());
                         GetIP();
                         if (StaticIPList.Contains(gii.GetIP()))
