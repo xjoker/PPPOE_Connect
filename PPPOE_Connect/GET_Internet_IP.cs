@@ -12,6 +12,16 @@ namespace PPPOE_Connect
         {
             string all = null;
             int count = 0;
+            //刷新DNS缓存
+            using (System.Diagnostics.Process process = new System.Diagnostics.Process())
+            {
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = "ipconfig /flushdns";
+                process.StartInfo = startInfo;
+                process.Start();
+            }
             while (count < 3)
             {
 
@@ -30,10 +40,11 @@ namespace PPPOE_Connect
 
                     return all;
                 }
-                catch
+                catch (System.Exception e)
                 {
                     count++;
                     Logging.Error("获取公网IP失败，尝试次数：" + count);
+                    Logging.Error(e);
                 }
             }
             return all = "获取失败!";

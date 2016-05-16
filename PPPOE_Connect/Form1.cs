@@ -33,7 +33,6 @@ namespace PPPOE_Connect
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //pppoe.pppoe_off();
             Logging.OpenLogFile();
             Logging.Info("----------  程序启动  ----------");
             Logging.Info("系统版本" + version);
@@ -143,15 +142,13 @@ namespace PPPOE_Connect
                     
                     if (label_PrivateIP.Text != "Null")
                     {
+
+
                         button1.Text = "断开";
                         button1.Enabled = true;
                         radio_LT_Line.Enabled = false;
                         radio_StaticIP.Enabled = false;
                         radio_Download.Enabled = false;
-                        if(pppoe_id == "ctcc")
-                        {
-                            Thread.Sleep(5000);
-                        }
                         Logging.Info(gii.GetIP());
                         GetIP();
                         if (StaticIPList.Contains(gii.GetIP()))
@@ -161,6 +158,7 @@ namespace PPPOE_Connect
                         pictureBox1.Image = imageList2.Images[0];
                         label3.Text = "连接成功~！";
                         Logging.Info("--------链接完成-------");
+
                     }
                     else
                     {

@@ -16,7 +16,9 @@ namespace PPPOE_Connect
 
             try
             {
-                LogFilePath = Path.Combine(Application.StartupPath, "xlqh.log");
+                //用户目录下的我的文档中创建日志文件 xlqh.log
+                Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                LogFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "xlqh.log");
 
                 //限制日志文件不大于30KB
                 if (File.Exists(LogFilePath))
