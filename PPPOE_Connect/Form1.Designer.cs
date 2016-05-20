@@ -224,6 +224,7 @@
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(0, 12);
             this.label_version.TabIndex = 12;
+            this.label_version.Click += new System.EventHandler(this.label_version_Click);
             // 
             // Form1
             // 

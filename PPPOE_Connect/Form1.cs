@@ -19,6 +19,7 @@ namespace PPPOE_Connect
             "222.76.112.85"
         };
 
+        private int cdClick=0;
         public int version = Environment.OSVersion.Version.Major + Environment.OSVersion.Version.Minor;
         GET_Internet_IP gii = new GET_Internet_IP();
         string pppoe_id = null;
@@ -95,6 +96,7 @@ namespace PPPOE_Connect
                     }
                         pppoe.pppoe_on(pppoe_id, pppoe_pw);
                         Thread.Sleep(500);
+                        //flushdns();
                         NetworkInterface[] allNetworkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
                         NetworkInterface[] array = allNetworkInterfaces;
                         for (int i = 0; i < array.Length; i++)
@@ -274,6 +276,47 @@ namespace PPPOE_Connect
                 this.Hide();
                 this.notifyIcon1.Visible = true;
             }
+        }
+
+        //ギリギリ愛～ キリキリ舞～
+        private void label_version_Click(object sender, EventArgs e)
+        {
+            if (cdClick>10)
+            {
+                foreach (var item in this.Controls)
+                {
+                    if (item.GetType() == typeof(Label))
+                    {
+                        (item as Label).Text = "ギリギリ愛～ キリキリ舞～";
+                    }
+                    if (item.GetType() == typeof(Button))
+                    {
+                        (item as Button).Text = "ギリギリ愛～ キリキリ舞～";
+                    }
+                    if (item.GetType() == typeof(RadioButton))
+                    {
+                        (item as RadioButton).Text = "ギリギリ愛～ キリキリ舞～";
+                    }
+                }
+            }
+            cdClick++;
+        }
+
+        private void flushdns()
+        {
+            //刷新DNS缓存
+            using (System.Diagnostics.Process process = new System.Diagnostics.Process())
+            {
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = "ipconfig /flushdns";
+                process.StartInfo = startInfo;
+                process.Start();
+                process.Close();
+                process.Dispose();
+            }
+
         }
     }
 }
