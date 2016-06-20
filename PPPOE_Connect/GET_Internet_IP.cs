@@ -18,18 +18,22 @@ namespace PPPOE_Connect
 
                 try
                 {
-                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("https://xjoker.us/getip.php");
-                    hwr.Timeout = 5000;
+                    //切换为搜狐的ip
+                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pv.sohu.com/cityjson");
+                    hwr.Timeout = 3000;
                     hwr.KeepAlive = false;
                     HttpWebResponse hwrs = (HttpWebResponse)hwr.GetResponse();
                     Stream s = hwrs.GetResponseStream();
                     StreamReader sr = new StreamReader(s, Encoding.Default);
                     all = sr.ReadToEnd(); //读取网站的数据
+                    int start = all.IndexOf("cip") +7;
+                    int end = all.IndexOf("\",", start);
+                    var tempip = all.Substring(start, end - start);
                     hwr.Abort();
                     hwrs.Close();
                     sr.Close();
 
-                    return all;
+                    return tempip;
                 }
                 catch (System.Exception e)
                 {

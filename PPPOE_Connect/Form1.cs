@@ -40,7 +40,7 @@ namespace PPPOE_Connect
             add_link.Create_link(version);
             label_Public_IP.Text = gii.GetIP();
             pictureBox1.Image = imageList1.Images[0];
-            label_version.Text = "0.5.1";
+            label_version.Text = "0.5.2";
             if (StaticIPList.Contains(gii.GetIP()))
             {
                 notifyIcon1.ShowBalloonTip(2000, "提示", "已经为静态IP网段，或者已经手动拨号！", ToolTipIcon.Info);
@@ -302,21 +302,6 @@ namespace PPPOE_Connect
             cdClick++;
         }
 
-        private void flushdns()
-        {
-            //刷新DNS缓存
-            using (System.Diagnostics.Process process = new System.Diagnostics.Process())
-            {
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "ipconfig /flushdns";
-                process.StartInfo = startInfo;
-                process.Start();
-                process.Close();
-                process.Dispose();
-            }
 
-        }
     }
 }
