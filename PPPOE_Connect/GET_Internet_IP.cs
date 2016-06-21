@@ -19,21 +19,21 @@ namespace PPPOE_Connect
                 try
                 {
                     //切换为搜狐的ip
-                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://pv.sohu.com/cityjson");
+                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://members.3322.org/dyndns/getip");
                     hwr.Timeout = 3000;
                     hwr.KeepAlive = false;
                     HttpWebResponse hwrs = (HttpWebResponse)hwr.GetResponse();
                     Stream s = hwrs.GetResponseStream();
                     StreamReader sr = new StreamReader(s, Encoding.Default);
-                    all = sr.ReadToEnd(); //读取网站的数据
-                    int start = all.IndexOf("cip") +7;
-                    int end = all.IndexOf("\",", start);
-                    var tempip = all.Substring(start, end - start);
+                    all = sr.ReadToEnd().Replace("\n",""); //读取网站的数据
+                    //int start = all.IndexOf("cip") +7;
+                    //int end = all.IndexOf("\",", start);
+                    //var tempip = all.Substring(start, end - start);
                     hwr.Abort();
                     hwrs.Close();
                     sr.Close();
 
-                    return tempip;
+                    return all;
                 }
                 catch (System.Exception e)
                 {
